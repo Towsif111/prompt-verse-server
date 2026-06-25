@@ -1,2 +1,7 @@
 .env
+<<<<<<< HEAD
 .vercel
+=======
+
+node_modules
+>>>>>>> c7af504 (fixed index.js respose for frontend)
