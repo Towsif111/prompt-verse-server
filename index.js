@@ -45,6 +45,15 @@ async function run() {
 
   res.json(result);
 });
+
+ app.get("/all-promts/:id", verifyToken, async (req, res) => {
+          const { id } = req.params;
+          const result = await roomCollection.findOne({
+            _id: new ObjectId(id),
+          });
+
+          res.json(result);
+      });
     
 
 
