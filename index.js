@@ -8,7 +8,6 @@ const app = express()
 const port = 5000
 require('dotenv').config();
 
-app.use(cors());
 app.use(express.json());
 
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
@@ -43,13 +42,13 @@ async function run() {
     const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID || '';
     const googleClient = new OAuth2Client(GOOGLE_CLIENT_ID);
 
-    
+
     function generateToken(user) {
       const payload = { id: user._id, email: user.email, role: user.role || 'User' };
       return jwt.sign(payload, JWT_SECRET, { expiresIn: '7d' });
     }
 
- 
+
     function verifyToken(req, res, next) {
       const authHeader = req.headers.authorization;
       if (!authHeader) return res.status(401).json({ message: 'Missing authorization header' });
@@ -77,7 +76,7 @@ async function run() {
       };
     }
 
-  
+
     app.post('/auth/register', async (req, res) => {
       const { name, email, photoURL, password } = req.body;
       if (!email || !password || !name) return res.status(400).json({ message: 'Name, email and password are required' });
@@ -99,7 +98,7 @@ async function run() {
       res.status(201).json({ token, user: { id: user._id, name: user.name, email: user.email, role: user.role } });
     });
 
-    
+
     app.post('/auth/login', async (req, res) => {
       const { email, password } = req.body;
       if (!email || !password) return res.status(400).json({ message: 'Email and password required' });
@@ -111,7 +110,7 @@ async function run() {
       res.json({ token, user: { id: user._id, name: user.name, email: user.email, role: user.role } });
     });
 
-    
+
     app.post('/auth/google', async (req, res) => {
       const { idToken } = req.body;
       if (!idToken) return res.status(400).json({ message: 'idToken required' });
@@ -140,7 +139,7 @@ async function run() {
       res.json({ token, user: { id: user._id, name: user.name, email: user.email, role: user.role } });
     });
 
-    
+
     app.get('/auth/me', verifyToken, async (req, res) => {
       const user = await usersCollection.findOne({ _id: new ObjectId(req.user.id) });
       if (!user) return res.status(404).json({ message: 'User not found' });
