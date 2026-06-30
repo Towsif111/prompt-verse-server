@@ -490,7 +490,6 @@ async function run() {
       try {
         const user = await usersCollection.findOne({ _id: new ObjectId(id) });
         if (user) {
-          // Delete user's prompts and bookmarks
           await promptCollection.deleteMany({ creatorEmail: user.email });
           const bookmarksCollection = db.collection("bookmarks");
           await bookmarksCollection.deleteMany({ userEmail: user.email });
